@@ -22,6 +22,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ include "frontend-chart.fullname" . }}
+            name: frontend-service
             port:
               number: {{ .Values.service.port }}
