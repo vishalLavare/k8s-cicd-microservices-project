@@ -45,6 +45,11 @@ jobs:
         run: |
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
+      - name: Create Secrets
+        run: |
+          kubectl create namespace production || true
+          kubectl apply -f k8s/secret.yaml -n production
+
       - name: Deploy Backend using Helm
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
