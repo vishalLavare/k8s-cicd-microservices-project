@@ -71,3 +71,13 @@ jobs:
         run: |
           kubectl rollout status deployment/backend-app -n production --timeout=300s
           kubectl rollout status deployment/frontend-app -n production --timeout=300s
+
+      - name: Debug Deployment Issues
+        if: failure()
+        run: |
+          echo "==== POD STATUS ===="
+          kubectl get pods -n production
+          echo "==== POD DESCRIPTIONS ===="
+          kubectl describe pods -l app=backend -n production
+          echo "==== POD LOGS ===="
+          kubectl logs -l app=backend -n production --all-containers=true || true
