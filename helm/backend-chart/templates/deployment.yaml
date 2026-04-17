@@ -24,7 +24,10 @@ spec:
             - name: FLASK_ENV
               value: {{ .Values.env.flaskEnv | quote }}
             - name: DATABASE_URL
-              value: {{ .Values.env.databaseUrl | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.databaseSecretName }}
+                  key: DATABASE_URL
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           livenessProbe:

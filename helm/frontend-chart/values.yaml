@@ -1,6 +1,6 @@
 replicaCount: 2
 image:
-  repository: MY_AWS_ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/frontend
+  repository: 142166253229.dkr.ecr.ap-south-1.amazonaws.com/frontend
   tag: "latest"
   pullPolicy: Always
 

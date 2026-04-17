@@ -1,6 +1,6 @@
 replicaCount: 2
 image:
-  repository: MY_AWS_ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/backend
+  repository: 142166253229.dkr.ecr.ap-south-1.amazonaws.com/backend
   tag: "latest"
   pullPolicy: Always
 
@@ -10,7 +10,8 @@ service:
 
 env:
   flaskEnv: "production"
-  databaseUrl: "postgresql://myuser:mypassword@database-service:5432/mydb"
+  # DATABASE_URL should be provided via a secret
+  databaseSecretName: "backend-secret"
 
 resources:
   requests:
