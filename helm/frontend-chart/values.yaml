@@ -1,6 +1,6 @@
 replicaCount: 2
 image:
-  repository: 142166253229.dkr.ecr.ap-south-1.amazonaws.com/frontend
+  repository: 142166253229.dkr.ecr.ap-south-1.amazonaws.com/deployment/frontend-app
   tag: "latest"
   pullPolicy: Always
 

@@ -26,7 +26,7 @@ jobs:
       - name: Build, tag, and push Backend Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: backend
+          ECR_REPOSITORY: deployment/backend-app
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
@@ -35,7 +35,7 @@ jobs:
       - name: Build, tag, and push Frontend Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: frontend
+          ECR_REPOSITORY: deployment/frontend-app
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./frontend
@@ -56,7 +56,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           helm upgrade --install backend-app ./helm/backend-chart \
-            --set image.repository=$ECR_REGISTRY/backend \
+            --set image.repository=$ECR_REGISTRY/deployment/backend-app \
             --set image.tag=$IMAGE_TAG \
             --namespace production \
             --create-namespace
@@ -67,15 +67,15 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           helm upgrade --install frontend-app ./helm/frontend-chart \
-            --set image.repository=$ECR_REGISTRY/frontend \
+            --set image.repository=$ECR_REGISTRY/deployment/frontend-app \
             --set image.tag=$IMAGE_TAG \
             --namespace production \
             --create-namespace
 
       - name: Verify Deployments
         run: |
-          kubectl rollout status deployment/backend-app -n production --timeout=300s
           kubectl rollout status deployment/frontend-app -n production --timeout=300s
+          kubectl rollout status deployment/backend-app -n production --timeout=300s
 
       - name: Debug Deployment Issues
         if: failure()

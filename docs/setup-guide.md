@@ -11,9 +11,9 @@
 To enable the GitHub Actions pipeline, setup the following Secrets in your `.github/workflows/cicd.yaml`:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
-- `AWS_REGION`
-- `KUBE_CONFIG_DATA` (base64 encoded kubeconfig)
-- `ECR_REGISTRY`
+- `AWS_REGION` (e.g., `ap-south-1`)
+- `EKS_CLUSTER_NAME` (e.g., `scrumptious-electro-outfit`)
+- `ECR_REGISTRY` (e.g., `142166253229.dkr.ecr.ap-south-1.amazonaws.com`)
 
 ## Deployment Steps
 
