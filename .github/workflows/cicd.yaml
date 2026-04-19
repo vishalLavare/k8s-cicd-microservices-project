@@ -43,7 +43,10 @@ jobs:
 
       - name: Update Kubeconfig
         run: |
-          aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
+          # Extract cluster name if EKS_CLUSTER_NAME is an ARN
+          CLUSTER_NAME=$(echo "${{ secrets.EKS_CLUSTER_NAME }}" | awk -F/ '{print $NF}')
+          echo "Updating kubeconfig for cluster: $CLUSTER_NAME"
+          aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name "$CLUSTER_NAME"
 
       - name: Create Secrets
         run: |
