@@ -43,10 +43,25 @@ jobs:
 
       - name: Update Kubeconfig
         run: |
-          # Extract cluster name if EKS_CLUSTER_NAME is an ARN
-          CLUSTER_NAME=$(echo "${{ secrets.EKS_CLUSTER_NAME }}" | awk -F/ '{print $NF}')
-          echo "Updating kubeconfig for cluster: $CLUSTER_NAME"
+          # Robustly extract cluster name if it's an ARN
+          if [[ "${{ secrets.EKS_CLUSTER_NAME }}" == arn:aws:eks:* ]]; then
+            CLUSTER_NAME=$(echo "${{ secrets.EKS_CLUSTER_NAME }}" | awk -F/ '{print $NF}')
+          else
+            CLUSTER_NAME="${{ secrets.EKS_CLUSTER_NAME }}"
+          fi
+          
+          echo "Updating kubeconfig for cluster: $CLUSTER_NAME in region: ${{ secrets.AWS_REGION }}"
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name "$CLUSTER_NAME"
+          
+          # Verify that the context was added
+          kubectl config get-contexts
+          kubectl config current-context
+
+      - name: Verify Cluster Connection
+        run: |
+          echo "Testing connection to Kubernetes API server..."
+          kubectl cluster-info
+
 
       - name: Create Secrets
         run: |
