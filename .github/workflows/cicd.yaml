@@ -63,10 +63,15 @@ jobs:
           kubectl cluster-info
 
 
-      - name: Create Secrets
+      - name: Deploy Infrastructure (Database)
         run: |
           kubectl create namespace production || true
           kubectl apply -f k8s/secret.yaml -n production
+          kubectl apply -f k8s/database-deployment.yaml -n production
+          kubectl apply -f k8s/database-service.yaml -n production
+          echo "Waiting for database to be ready..."
+          kubectl rollout status deployment/database-deployment -n production --timeout=180s
+
 
       - name: Deploy Backend using Helm
         env:
