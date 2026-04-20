@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 image:
   repository: 142166253229.dkr.ecr.ap-south-1.amazonaws.com/deployment/backend-app
   tag: "latest"
